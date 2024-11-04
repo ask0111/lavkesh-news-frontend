@@ -12,7 +12,7 @@ export const MainHeader = () => {
       <ul className='flex gap-4 text-h5 '>
       <li className='hover:text-green-500 cursor-pointer' onClick={()=> route.push("/")} >Home</li>
 
-        {[ "Politics", "Social", "Mumbai", "Capital", "Sports"].map((title)=> <li key={title} className='hover:text-green-500 cursor-pointer' onClick={()=> route.push(`${title.toLowerCase().trim().split(" ").join("")}`)} >{title}</li>
+        {[ "Politics", "Social", "Mumbai", "Capital", "Sports"].map((title)=> <li key={title} className='hover:text-green-500 cursor-pointer' onClick={()=> route.push(`/${title.toLowerCase().trim().split(" ").join("")}`)} >{title}</li>
       )}
       </ul>
       <Link href={'/faviorate'} className='text-h4 font-h2 flex gap-3 items-center'><CiStar className='text-h1' /> Favorite</Link>

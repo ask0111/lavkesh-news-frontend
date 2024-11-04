@@ -1,4 +1,5 @@
 // pages/NewsPage.tsx
+import Link from "next/link";
 import React from "react";
 
 interface NewsItem {
@@ -38,9 +39,13 @@ const newsData: NewsItem[] = [
   // Add more articles as needed
 ];
 
-const NewsPage: React.FC = () => {
-  const [featuredNews, ...otherNews] = newsData;
+interface NewsPageProps {
+    params: any
+  }
 
+const NewsPage: React.FC<NewsPageProps> = ({params}) => {
+  const [featuredNews, ...otherNews] = newsData;
+const { slug } = params;
   return (
     <div className="bg-gray-100 p-6">
       {/* <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Political News</h1> */}
@@ -59,7 +64,7 @@ const NewsPage: React.FC = () => {
             <p className="mt-4">{featuredNews.summary}</p>
           </div>
           <span className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-lg">
-            {featuredNews.category}
+            {slug.toUpperCase()}
           </span>
         </div>
       </div>
@@ -67,7 +72,8 @@ const NewsPage: React.FC = () => {
       {/* Other News */}
       <div className=" grid grid-cols-1 place-content-center md:grid-cols-1 gap-6">
         {otherNews.map((news) => (
-          <div
+          <Link
+          href={`/${slug}/details`}
             key={news.id}
             className="group w-[70%] m-auto flex bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition duration-300"
           >
@@ -88,7 +94,7 @@ const NewsPage: React.FC = () => {
               <p className="text-sm text-gray-500 mt-1">{news.date}</p>
               <p className="text-gray-700 mt-3">{news.summary}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
       <div>
