@@ -17,7 +17,8 @@ const newsData: NewsItem[] = [
     title: "Political Landscape in 2024: Key Changes",
     image: "https://images.pexels.com/photos/592552/pexels-photo-592552.jpeg",
     date: "Nov 1, 2024",
-    summary: "An overview of major shifts in the political landscape as we approach 2024 An overview of major shifts in the political landscape as we approach 2024 An overview of major shifts in the political landscape as we approach 2024...",
+    summary:
+      "An overview of major shifts in the political landscape as we approach 2024 An overview of major shifts in the political landscape as we approach 2024 An overview of major shifts in the political landscape as we approach 2024...",
     category: "Politics",
   },
   {
@@ -25,7 +26,8 @@ const newsData: NewsItem[] = [
     title: "Election Insights and Voter Turnout",
     image: "https://images.pexels.com/photos/592552/pexels-photo-592552.jpeg",
     date: "Oct 28, 2024",
-    summary: "Voter turnout has become a critical focus this election season An overview of major shifts in the political landscape as we approach 2024An overview of major shifts in the political landscape as we approach 2024 ...",
+    summary:
+      "Voter turnout has become a critical focus this election season An overview of major shifts in the political landscape as we approach 2024An overview of major shifts in the political landscape as we approach 2024 ...",
     category: "Politics",
   },
   {
@@ -33,23 +35,24 @@ const newsData: NewsItem[] = [
     title: "Debates Shape the Future of Legislation",
     image: "https://images.pexels.com/photos/592552/pexels-photo-592552.jpeg",
     date: "Oct 25, 2024",
-    summary: "Debates over critical policies continue to shape the future An overview of major shifts in the political landscape as we approach 2024An overview of major shifts in the political landscape as we approach 2024...",
+    summary:
+      "Debates over critical policies continue to shape the future An overview of major shifts in the political landscape as we approach 2024An overview of major shifts in the political landscape as we approach 2024...",
     category: "Politics",
   },
   // Add more articles as needed
 ];
 
 interface NewsPageProps {
-    params: any
-  }
+  params: any;
+}
 
-const NewsPage: React.FC<NewsPageProps> = ({params}) => {
+const NewsPage: React.FC<NewsPageProps> = async({ params }) => {
   const [featuredNews, ...otherNews] = newsData;
-const { slug } = params;
+  const { slug } = await params;
   return (
     <div className="bg-gray-100 p-6">
       {/* <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Political News</h1> */}
-      
+
       {/* Featured News */}
       <div className="w-full bg-white shadow-lg rounded-lg overflow-hidden mb-8">
         <div className="relative">
@@ -68,12 +71,12 @@ const { slug } = params;
           </span>
         </div>
       </div>
-      
+
       {/* Other News */}
       <div className=" grid grid-cols-1 place-content-center md:grid-cols-1 gap-6">
         {otherNews.map((news) => (
           <Link
-          href={`/${slug}/details`}
+            href={`/${slug}/details`}
             key={news.id}
             className="group w-[70%] m-auto flex bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition duration-300"
           >
@@ -97,9 +100,7 @@ const { slug } = params;
           </Link>
         ))}
       </div>
-      <div>
-
-      </div>
+      <div></div>
     </div>
   );
 };

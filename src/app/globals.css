@@ -20,3 +20,47 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+/* styles/globals.css */
+
+@keyframes rotateX {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+.rotate-x {
+  animation: rotateX 3s infinite linear; /* Adjust duration and timing as needed */
+}
+
+/* Keyframes for the wave effect */
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0); /* No movement */
+  }
+  50% {
+    transform: translateY(10px); /* Return to the original position */
+  }
+  100% {
+    transform: translateY(0px); /* Move down */
+  }
+}
+
+/* Apply the wave effect to the text */
+.wave-text {
+  animation: wave 3s infinite ease-in-out; /* Infinite wave animation */
+}
+
+
+.border-bottom{
+  border-bottom: 1px solid gray;
+}
+
+.border-focus{ outline: 'none'};
