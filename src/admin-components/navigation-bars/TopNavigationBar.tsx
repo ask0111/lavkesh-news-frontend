@@ -17,7 +17,7 @@ const TopBar: React.FC = () => {
   const OnClickHandler = ()=>{}
 
   return (
-    <div className="w-full h-16 bg-blue-600 flex items-center justify-between pl-10 shadow-md">
+    <div className="w-full px-4 h-16 bg-blue-600 flex items-center justify-between pl-10 shadow-md">
       {/* Search Bar */}
       <div className='w-96 flex items-center gap-4'>
       <GoSidebarExpand

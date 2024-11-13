@@ -64,3 +64,8 @@ body {
 }
 
 .border-focus{ outline: 'none'};
+
+.thinScrollBar::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
