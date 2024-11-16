@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { FiUpload, FiSearch } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { RootState } from "@/common-component/redux-config/store";
+import StorageSlider from "../common/StorageSlider";
 // import { uploadToS3 } from "@/utils/uploadToS3";
 // import copy from "clipboard-copy";
 
@@ -11,6 +12,9 @@ interface UploadedImage {
   url: string;
   name: string;
 }
+
+const usedStorage = 35; // GB used
+const totalStorage = 100; // GB total
 
 export default function EditorSidebar() {
   const [activeTab, setActiveTab] = useState<"Images" | "Videos" | "Audio">(
@@ -80,7 +84,7 @@ export default function EditorSidebar() {
   const ActiveTabHandler = (value: "Images" | "Videos" | "Audio") => {
     setActiveTab(value);
     setPreviewImage(null);
-    setUploadedImages([])
+    setUploadedImages([]);
   };
   return (
     <div
@@ -97,6 +101,7 @@ export default function EditorSidebar() {
         <input
           style={{ outline: "none" }}
           type="text"
+          // onChange={(e)=>{}}
           placeholder="Search images by keyword, tags, colour..."
           className="bg-gray-200 p-2 rounded-full flex-1 text-sm outline-none"
         />
@@ -136,7 +141,12 @@ export default function EditorSidebar() {
         </button>
       </div>
 
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+      <StorageSlider usedStorage={usedStorage} totalStorage={totalStorage} />
+    </div>
+    <br />
       {/* Upload Button */}
+
       <button
         onClick={handleButtonClick}
         className="w-full bg-purple-600 border text-gray-400 py-2 px-4 rounded-full flex items-center justify-center mb-6"
@@ -206,37 +216,39 @@ export default function EditorSidebar() {
       <br />
       {/* Display Uploaded Images */}
       <div
-        style={{ overflowY: "scroll" }}
-        className="flex thinScrollBar flex-wrap gap-3 bg-gray-100 h-screen border overflow-scroll p-2 mb-6"
+        style={{ overflowY: "scroll", }}
+        className="flex thinScrollBar flex-wrap gap-3 bg-gray-100 border h-screen overflow-scroll p-2 mb-6"
       >
         {uploadedImages.map((image, index) => (
           <div
             key={index}
             onClick={() => handleImageClick(image.url)}
-            style={{ width: "60px", height: "100px" }}
+            style={{
+              width: activeTab !== "Audio" ? "100px" : "100%",
+              height: activeTab !== "Audio" ? "120px" : "120px",
+            }}
             className="cursor-pointer p-1 rounded-md text-xs overflow-hidden bg-white border"
           >
             {activeTab === "Images" ? (
               <img
                 src={image.url}
                 alt="Preview"
-                className="w-full h-24 object-contain"
+                className="w-full h-20 object-contain scale-100 hover:scale-125"
               />
             ) : activeTab === "Videos" ? (
               <video
                 src={image.url}
                 controls
-                width="100%"
                 className="w-full h-24 object-contain"
               />
             ) : (
               <audio
                 src={image.url}
                 controls
-                className="w-full h-24 object-contain"
+                className="w-full h-full object-contain"
               />
             )}
-            <p className=" text-center text-gray-600 mt-1 line-clamp-2">
+            <p className="text-center text-gray-600 mt-1 line-clamp-1">
               {image.name}
             </p>
           </div>

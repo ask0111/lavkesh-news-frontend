@@ -58,13 +58,16 @@ export default function NewPost() {
 
       <div className="mb-4">
         <label className="block text-gray-700 font-semibold mb-2">
-          Upload Cover Image
+          Image Link
         </label>
         <input
-          type="file"
-          accept="image/*"
+          type="text"
+          // accept="image/*
+          style={{outline: 'none'}}
+
+          placeholder="Image link"
           onChange={handleImageUpload}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          className="w-full p-2 border-bottom border-gray-300 rounded-md"
         />
       </div>
 
