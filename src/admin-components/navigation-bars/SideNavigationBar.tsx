@@ -44,12 +44,12 @@ const Sidebar: React.FC = () => {
       style={{display: toggle ? "block": "none"}}
       className={`h-screen relative p-6 flex flex-col transition-all duration-300 ease-in-out`}
       >
-        <div className="flex items-center justify-center">
+        <Link href={'/'} className="flex items-center justify-center">
           <FaUserShield
             size={40}
             className="text-blue-600 wave-text animate-pulse hover:animate-spin cursor-pointer transition-transform duration-300 ease-in-out"
           />
-        </div>
+        </Link>
         <h2 className="text-center text-xl font-bold py-4 bg-gradient-to-r from-yellow-500 to-green-500 text-transparent bg-clip-text rotate-x">
           Admin Dashboard
         </h2>
@@ -65,7 +65,7 @@ const Sidebar: React.FC = () => {
                 href={`${commonpath + labelPath(item.label)}`}
               >
                 <item.icon size={20} className="mr-3" />
-                <span className="text-sm group-hover:text-black group-hover:font-extrabold group-hover:text-h5 transition-all duration-300 ease-in-out">
+                <span className="text-sm whitespace-nowrap group-hover:text-black group-hover:font-extrabold group-hover:text-h5 transition-all duration-300 ease-in-out">
                   {item.label}
                 </span>
               </Link>

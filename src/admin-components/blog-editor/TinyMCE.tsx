@@ -28,105 +28,31 @@ export default function NewPost() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">Title</label>
-        <input
-        style={{outline: 'none'}}
-          type="text"
-          placeholder="Enter the title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border-bottom border-focus border-gray-300"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">
-          Subtitle
-        </label>
-        <input
-                style={{outline: 'none'}}
-
-          type="text"
-          placeholder="Enter the subtitle"
-          value={subtitle}
-          onChange={(e) => setSubtitle(e.target.value)}
-          className="w-full p-2 border-bottom border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">
-          Image Link
-        </label>
-        <input
-          type="text"
-          // accept="image/*
-          style={{outline: 'none'}}
-
-          placeholder="Image link"
-          onChange={handleImageUpload}
-          className="w-full p-2 border-bottom border-gray-300 rounded-md"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">
-          Content
-        </label>
-        <Editor
-          //   apiKey={process.env.YOUR_TINYMCE_API_KEY}
-          init={{
-            plugins: [
-              "anchor",
-              "autolink",
-              "charmap",
-              "codesample",
-              "emoticons",
-              "image",
-              "link",
-              "lists",
-              "media",
-              "searchreplace",
-              "table",
-              "visualblocks",
-              "wordcount",
-              "checklist",
-              "mediaembed",
-              "export",
-              "formatpainter",
-              "pageembed",
-              "a11ychecker",
-              "tinymcespellchecker",
-              "permanentpen",
-              "powerpaste",
-              "advtable",
-              "advcode",
-              "editimage",
-              "advtemplate",
-              "inlinecss",
-              "markdown",
-            ],
-            toolbar:
-              "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | checklist numlist bullist indent outdent | removeformat",
-            tinycomments_mode: "embedded",
-          }}
-          initialValue="Write your content here..."
-          onEditorChange={handleEditorChange}
-        />
-      </div>
-
-      <button
-        onClick={togglePreview}
-        className="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700"
-      >
-        {preview ? "Edit" : "Preview"}
+    <div className="max-w-4xl mx-auto px-6 py-4 bg-white shadow-md rounded-md">
+      <button className="w-full flex justify-center">
+        <span
+          onClick={() => setPreview(false)}
+          className={`${
+            !preview ? "bg-red-500 text-white font-extrabold" : "bg-green-500"
+          } border px-6 py-1`}
+        >
+          Edit
+        </span>{" "}
+        <span
+          onClick={() => setPreview(true)}
+          className={`${
+            preview ? "bg-red-500 text-white font-extrabold" : "bg-green-500"
+          } border px-6 py-1`}
+        >
+          Preview
+        </span>
       </button>
-
-      {preview && (
+      <br />
+      {preview ? (
         <div className="border border-gray-300 p-4 mt-6 rounded-md bg-gray-50">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Preview</h2>
+          <h2 className="text-2xl text-center font-bold text-red-500 mb-4">
+            Preview
+          </h2>
           <h3 className="text-xl font-semibold text-gray-700">{title}</h3>
           <h4 className="text-lg font-medium text-gray-600">{subtitle}</h4>
           {image && (
@@ -141,7 +67,102 @@ export default function NewPost() {
             dangerouslySetInnerHTML={{ __html: content }}
           />
         </div>
+      ) : (
+        <>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2">
+              Title
+            </label>
+            <input
+              style={{ outline: "none" }}
+              type="text"
+              placeholder="Enter the title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full p-2 border-bottom border-focus border-gray-300"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2">
+              Subtitle
+            </label>
+            <input
+              style={{ outline: "none" }}
+              type="text"
+              placeholder="Enter the subtitle"
+              value={subtitle}
+              onChange={(e) => setSubtitle(e.target.value)}
+              className="w-full p-2 border-bottom border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2">
+              Image Link
+            </label>
+            <input
+              type="text"
+              // accept="image/*
+              style={{ outline: "none" }}
+              placeholder="Image link"
+              onChange={handleImageUpload}
+              className="w-full p-2 border-bottom border-gray-300 rounded-md"
+            />
+          </div>
+          <TinyMCEEditor label="Content" handleEditorChange={handleEditorChange} />
+        </>
       )}
+      <br />
     </div>
   );
+}
+
+
+export const TinyMCEEditor = ({label, handleEditorChange}: {label: string, handleEditorChange: any} )=>{
+return <div className="mb-4">
+<label className="block text-gray-700 font-semibold mb-2">
+  {label}
+</label>
+<Editor
+  //   apiKey={process.env.YOUR_TINYMCE_API_KEY}
+  init={{
+    plugins: [
+      "anchor",
+      "autolink",
+      "charmap",
+      "codesample",
+      "emoticons",
+      "image",
+      "link",
+      "lists",
+      "media",
+      "searchreplace",
+      "table",
+      "visualblocks",
+      "wordcount",
+      "checklist",
+      "mediaembed",
+      "export",
+      "formatpainter",
+      "pageembed",
+      "a11ychecker",
+      "tinymcespellchecker",
+      "permanentpen",
+      "powerpaste",
+      "advtable",
+      "advcode",
+      "editimage",
+      "advtemplate",
+      "inlinecss",
+      "markdown",
+    ],
+    toolbar:
+      "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | checklist numlist bullist indent outdent | removeformat",
+    tinycomments_mode: "embedded",
+  }}
+  initialValue="Write your content here..."
+  onEditorChange={handleEditorChange}
+/>
+</div>
 }
