@@ -1,5 +1,6 @@
 "use client"
 import { useRouter } from 'next/navigation';
+import { BsArrowLeft } from 'react-icons/bs';
 
 const NotFoundPage: React.FC = () => {
   const router = useRouter();
@@ -33,9 +34,9 @@ const NotFoundPage: React.FC = () => {
         {/* Call to Action Button */}
         <button
           onClick={goToHome}
-          className="bg-yellow-500 text-black text-lg font-bold py-2 px-6 rounded-lg hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105"
-        >
-          Go Back Home
+          className="bg-yellow-500 text-black flex items-center gap-2 text-lg font-bold py-2 px-6 rounded-lg hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105"
+        ><BsArrowLeft />
+          Go Back
         </button>
       </div>
     </div>

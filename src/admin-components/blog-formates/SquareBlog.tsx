@@ -9,10 +9,11 @@ export const SquareBlog = ({
 }: any) => {
 
   return (
-    <div style={{minWidth: '200px'}} className="bg-white roundedv-lg shadow-md flex flex-1 flex-col justify-between  mr-4 py-2 mb-4">
-      <div className="flex flex-col flex-grow">
-        <div className="border w-full h-[10vh] ">
-          <div style={{width: 'auto', height: '200px'}} className="w-[200px] h-[200px]">
+    <div style={{minWidth: '200px' }} className="bg-white roundedv-lg shadow-md flex flex-1 flex-col justify-between  mr-4 py-2 mb-4">
+    {/* <div style={{minWidth: '200px', flexBasis: 1, flexGrow: 1 }} className="bg-white roundedv-lg shadow-md flex flex-1 flex-col justify-between  mr-4 py-2 mb-4"> */}
+      {/* <div className="flex flex-col flex-grow"> */}
+        <div className="border w-full h-auto ">
+          <div className="w-full h-[200px]">
             <img
               src={blog.image}
               className="w-full h-full object-cover aspect-square"
@@ -28,7 +29,7 @@ export const SquareBlog = ({
           <span className="flex gap-1 justify-end items-center text-gray-400 text-xs"><TiEyeOutline size={16} /> {blog?.visitorCount}</span>
           <p className="text-gray-600 line-clamp-3">{blog.subTitle}</p>
         </div>
-      </div>
+      {/* </div> */}
       <div className="flex gap-2 mt-4 justify-around">
         <span
           title="Edit"

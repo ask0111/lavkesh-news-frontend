@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 
 :root {
@@ -65,7 +65,21 @@ body {
 
 .border-focus{ outline: 'none'};
 
-.thinScrollBar::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+.thinScrollBar {
+  scrollbar-width:thin;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 7px; 
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f0f0f0; 
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #888; /* Scrollbar thumb color */
+  border-radius: 5px; /* Round corners */
+  border: 2px solid #f0f0f0; /* Optional: adds spacing */
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Thumb color on hover */
 }

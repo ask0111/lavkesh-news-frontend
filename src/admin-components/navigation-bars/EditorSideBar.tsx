@@ -5,6 +5,7 @@ import { FiUpload, FiSearch } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { RootState } from "@/common-component/redux-config/store";
 import StorageSlider from "../common/StorageSlider";
+import { IoCloseOutline } from "react-icons/io5";
 // import { uploadToS3 } from "@/utils/uploadToS3";
 // import copy from "clipboard-copy";
 
@@ -27,6 +28,8 @@ export default function EditorSidebar() {
   const [previewImage, setPreviewImage] = useState<string | null>(null); // Image preview URL
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // Selected file to upload
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [closeStorageSlider, setCloseStorageSlider] = useState(true);
+  const [closeMediaPopop, setCloseMediaPopop] = useState(true);
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -93,17 +96,17 @@ export default function EditorSidebar() {
         borderLeft: "1px solid lightgray",
         display: toggle ? "block" : "none",
       }}
-      className="w-20 bg-white p-4 shadow-sm"
+      className="w-20 bg-white p-4 shadow-sm custom-scrollbar overflow-y-scroll"
     >
       {/* Search and Upload Section */}
       <div className="flex items-center border px-2 mb-4">
-        <FiSearch className="text-gray-500 mr-2 cursor-pointer" />
+        <FiSearch className=" mr-2 cursor-pointer" />
         <input
           style={{ outline: "none" }}
           type="text"
           // onChange={(e)=>{}}
           placeholder="Search images by keyword, tags, colour..."
-          className="bg-gray-200 p-2 rounded-full flex-1 text-sm outline-none"
+          className="p-2 rounded-full flex-1 text-sm outline-none"
         />
       </div>
 
@@ -141,15 +144,24 @@ export default function EditorSidebar() {
         </button>
       </div>
 
-      <div className=" flex items-center justify-center bg-gray-100 p-6">
-      <StorageSlider usedStorage={usedStorage} totalStorage={totalStorage} />
-    </div>
-    <br />
+      {closeStorageSlider && (
+        <div className="relative flex items-center justify-center bg-gray-100 p-6">
+          <IoCloseOutline
+            onClick={() => setCloseStorageSlider(false)}
+            className="absolute top-2 right-2 cursor-pointer "
+          />
+          <StorageSlider
+            usedStorage={usedStorage}
+            totalStorage={totalStorage}
+          />
+        </div>
+      )}
+      <br />
       {/* Upload Button */}
 
       <button
         onClick={handleButtonClick}
-        className="w-full bg-purple-600 border text-gray-400 py-2 px-4 rounded-full flex items-center justify-center mb-6"
+        className="w-full bg-purple-600 border text-white py-2 px-4 rounded-full flex items-center justify-center mb-6"
       >
         <FiUpload className="mr-2" />
         Upload files
@@ -203,7 +215,11 @@ export default function EditorSidebar() {
           </button>
         </div>
       ) : (
-        <div className="bg-gray-50 p-4 rounded-lg text-center mb-6">
+        closeMediaPopop && <div className="relative bg-gray-50 p-4 rounded-lg text-center mb-6">
+          <IoCloseOutline
+            onClick={() => setCloseMediaPopop(false)}
+            className="absolute top-2 right-2 cursor-pointer "
+          />
           <p className="text-sm text-gray-700 font-semibold mb-2">
             Faster media uploads
           </p>
@@ -216,8 +232,7 @@ export default function EditorSidebar() {
       <br />
       {/* Display Uploaded Images */}
       <div
-        style={{ overflowY: "scroll", }}
-        className="flex thinScrollBar flex-wrap gap-3 bg-gray-100 border h-screen overflow-scroll p-2 mb-6"
+        className="flex overflow-y-scroll custom-scrollbar flex-wrap gap-3 bg-gray-100 border h-[400px] p-2 mb-6"
       >
         {uploadedImages.map((image, index) => (
           <div

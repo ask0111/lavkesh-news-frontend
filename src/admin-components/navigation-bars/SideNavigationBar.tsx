@@ -42,15 +42,15 @@ const Sidebar: React.FC = () => {
     
       <div
       style={{display: toggle ? "block": "none"}}
-      className={`h-screen relative p-6 flex flex-col transition-all duration-300 ease-in-out`}
+      className={`h-screen overflow-y-scroll custom-scrollbar relative p-6 flex flex-col transition-all duration-300 ease-in-out`}
       >
         <Link href={'/'} className="flex items-center justify-center">
           <FaUserShield
             size={40}
-            className="text-blue-600 wave-text animate-pulse hover:animate-spin cursor-pointer transition-transform duration-300 ease-in-out"
+            className="text-blue-600 wave-text hover:animate-ping cursor-pointer transition-transform duration-300 ease-in-out"
           />
         </Link>
-        <h2 className="text-center text-xl font-bold py-4 bg-gradient-to-r from-yellow-500 to-green-500 text-transparent bg-clip-text rotate-x">
+        <h2 className="text-center text-xl font-bold py-4 bg-gradient-to-r from-yellow-500 whitespace-nowrap to-green-500 text-transparent bg-clip-text rotate-x">
           Admin Dashboard
         </h2>
         <br />
@@ -58,14 +58,14 @@ const Sidebar: React.FC = () => {
           {navItems.map((item, index) => (
             <div
               key={index}
-              className="p-4 hover:text-red-600 hover:font-extrabold"
+              className="p-4 hover:text-blue-600 hover:font-extrabold"
             >
               <Link
-                className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 transition"
+                className="flex items-center gap-3 cursor-pointer transition"
                 href={`${commonpath + labelPath(item.label)}`}
               >
                 <item.icon size={20} className="mr-3" />
-                <span className="text-sm whitespace-nowrap group-hover:text-black group-hover:font-extrabold group-hover:text-h5 transition-all duration-300 ease-in-out">
+                <span className="text-sm whitespace-nowrap hover:font-extrabold ">
                   {item.label}
                 </span>
               </Link>
