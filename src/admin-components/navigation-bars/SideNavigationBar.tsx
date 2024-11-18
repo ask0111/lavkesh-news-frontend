@@ -31,6 +31,7 @@ const navItems: NavItem[] = [
   { icon: FaBook, label: "Courses" },
   { icon: FaEnvelope, label: "Messages" },
   { icon: FaUserAlt, label: "Profile" },
+  { icon: FaChartLine, label: "Admin control" },
   { icon: FaChartLine, label: "Reports" },
   { icon: FaSignOutAlt, label: "Sign Out" },
 ];
