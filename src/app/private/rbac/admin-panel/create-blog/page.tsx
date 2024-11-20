@@ -1,4 +1,4 @@
-import NewPost from '@/admin-components/blog-editor/TinyMCE'
+import NewPost from '@/admin-components/blog-editor'
 import React from 'react'
 
 const page = () => {

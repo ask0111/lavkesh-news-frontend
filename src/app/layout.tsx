@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { usePathname } from "next/navigation";
@@ -8,6 +8,7 @@ import { MainHeader } from "@/components/headers/MainHeader";
 import MainFooter from "@/components/footers/MainFooter";
 import { Provider } from "react-redux";
 import store from "@/common-component/redux-config/store";
+import { ToastProvider } from "@/common-component/custom-toast/ToastContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,23 +32,24 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`relative ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Provider store={store}>
-
-        {isAdminPath ? (
-          // Render only children for admin paths
-          children
-        ) : (
-          // Render the full layout for non-admin paths
-          <>
-            <BreakingContent />
-            <MainHeader />
-            {children}
-            <MainFooter />
-          </>
-        )}
-        </Provider>
+        <ToastProvider>
+          <Provider store={store}>
+            {isAdminPath ? (
+              // Render only children for admin paths
+              children
+            ) : (
+              // Render the full layout for non-admin paths
+              <>
+                <BreakingContent />
+                <MainHeader />
+                {children}
+                <MainFooter />
+              </>
+            )}
+          </Provider>
+        </ToastProvider>
       </body>
     </html>
   );
