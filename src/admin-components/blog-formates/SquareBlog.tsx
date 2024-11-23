@@ -4,9 +4,9 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDelete, MdOutlineArchive, MdOutlineUnarchive } from "react-icons/md";
 import { TiEyeOutline } from "react-icons/ti";
 
-export const SquareBlog = ({
-  blog
-}: any) => {
+export const SquareBlog: React.FC<{  onEdit: () => void;  onClick: () => void; blog: any }> = ({
+  onEdit, onClick, blog
+}) => {
 
   return (
     <div style={{minWidth: '200px' }} className="bg-white roundedv-lg shadow-md flex flex-1 flex-col justify-between  mr-4 py-2 mb-4">
@@ -38,6 +38,8 @@ export const SquareBlog = ({
           <FaRegEdit
             className="cursor-pointer text-green-500"
             size={16}
+            onClick={onEdit
+            }
           />
         </span>
         <span
@@ -62,6 +64,7 @@ export const SquareBlog = ({
         >
           <MdDelete
             size={16}
+            onClick={onClick}
             className="text-red-500 cursor-pointer"
           />
         </span>

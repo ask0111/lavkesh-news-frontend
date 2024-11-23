@@ -2,18 +2,22 @@
 import { useEffect, useRef, useState } from "react";
 import { FiUpload, FiSearch } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import { RootState } from "@/common-component/redux-config/store";
+import { AppDispatch, RootState } from "@/common-component/redux-config/store";
 import StorageSlider from "../common/StorageSlider";
 import { IoCloseOutline } from "react-icons/io5";
 import { useToast } from "@/common-component/custom-toast/ToastContext";
 import { apiService } from "@/services/axios.service";
 import { AiFillDelete, AiOutlineCopy } from "react-icons/ai";
+import { RxCross1 } from "react-icons/rx";
+import { setEditorSidebarToggle } from "@/common-component/redux-config/slices/toggleSlice";
+import { useDispatch } from "react-redux";
 
 const usedStorage = 35; // GB used
 const totalStorage = 100; // GB total
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export default function EditorSidebar() {
+  const dispatch = useDispatch<AppDispatch>();
   const toggle = useSelector(
     (state: RootState) => state.toggle.editorSidebarToggleValue
   );
@@ -112,7 +116,7 @@ export default function EditorSidebar() {
         removeAndAddFile(null, fileData);
         setPreviewImage(null);
         setSelectedFile(null);
-        showToast("File uploaded successfully!", 'success');
+        showToast("File uploaded successfully!", "success");
       } else {
         showToast(response.message, "error");
       }
@@ -121,7 +125,6 @@ export default function EditorSidebar() {
       showToast("Error uploading file. Please try again.", "error");
     }
   };
-
 
   const handleDeleteImage = async (type: string, fileId: number) => {
     if (!fileId) {
@@ -162,7 +165,8 @@ export default function EditorSidebar() {
 
   const [showCopyIcon, setShowCopyIcon] = useState<string | null>(null);
   const handleImageClick = (url: string, id: string) => {
-    navigator.clipboard.writeText(url) // Copy the URL
+    navigator.clipboard
+      .writeText(url) // Copy the URL
       .then(() => {
         setShowCopyIcon(id); // Show copy icon for the clicked image
         setTimeout(() => setShowCopyIcon(null), 2000); // Hide the icon after 2 seconds
@@ -172,23 +176,37 @@ export default function EditorSidebar() {
       });
   };
 
-
   return (
     <div
-      style={{
-        width: "280px",
-        borderLeft: "1px solid lightgray",
-        display: toggle ? "block" : "none",
-      }}
-      className="w-20 bg-white p-4 shadow-sm custom-scrollbar overflow-y-scroll"
+      style={
+        {
+          // width: "280px",
+          // borderLeft: "1px solid lightgray",
+          // transform: toggle ? "translateX(0)" : "translateX(-100%)",
+          // transition: "transform 0.3s ease-in-out",
+          // position: window.innerWidth < 1100 ? "absolute" : "relative",
+        }
+      }
+      className={`w-72 p-4 border-l border-gray-300 bg-white shadow-sm custom-scrollbar overflow-y-scroll z-20 top-0 ${
+        window.innerWidth < 1100 ? "absolute" : ""
+      } transform transition-transform duration-300 ease-in-out ${
+        toggle ? "translate-x-0" : "absolute -translate-x-full"
+      }`}
     >
+      <RxCross1
+        onClick={() => dispatch(setEditorSidebarToggle(false))}
+        className="w-7 h-6 p-1 shadow-sm rounded-full bg-transparent cursor-pointer absolute top-0 right-0"
+      />
       {/* Search and Upload Section */}
       <div className="flex items-center border px-2 mb-4">
-        <FiSearch onClick={()=> getAllUploadedData(searchFileText)} className=" mr-2 cursor-pointer" />
+        <FiSearch
+          onClick={() => getAllUploadedData(searchFileText)}
+          className=" mr-2 cursor-pointer"
+        />
         <input
           style={{ outline: "none" }}
           type="text"
-          onChange={(e)=>setSearchFileTest(e.target.value)}
+          onChange={(e) => setSearchFileTest(e.target.value)}
           placeholder="Search images by keyword, tags, colour..."
           className="p-2 rounded-full flex-1 text-sm outline-none"
         />
@@ -340,21 +358,21 @@ export default function EditorSidebar() {
 
             {/* Conditional Rendering for Image/Video/Audio */}
             {activeTab === "Image" ? (
-               <div
-               className="relative"
-               onClick={() => handleImageClick(file.fileUrl, file._id)}
-             >
-               <img
-                 src={file.fileUrl}
-                 alt={file.fileName}
-                 className="w-full h-20 object-cover scale-100 hover:scale-125"
-               />
-               {showCopyIcon === file._id && (
-                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                   <AiOutlineCopy className="text-white text-2xl animate-fade-in" />
-                 </div>
-               )}
-             </div>
+              <div
+                className="relative"
+                onClick={() => handleImageClick(file.fileUrl, file._id)}
+              >
+                <img
+                  src={file.fileUrl}
+                  alt={file.fileName}
+                  className="w-full h-20 object-cover scale-100 hover:scale-125"
+                />
+                {showCopyIcon === file._id && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <AiOutlineCopy className="text-white text-2xl animate-fade-in" />
+                  </div>
+                )}
+              </div>
             ) : (
               <audio
                 src={file.fileUrl}

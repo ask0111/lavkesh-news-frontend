@@ -29,13 +29,14 @@ export default function RootLayout({
   const pathname = usePathname();
   const isAdminPath = pathname.startsWith("/private/rbac/admin-panel/");
 
+  const isAuthPage = pathname.startsWith("/private/rbac/login") || pathname.startsWith("/private/rbac/register")
   return (
     <html lang="en">
       <body
         className={`relative ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ToastProvider>
-          <Provider store={store}>
+          { isAuthPage ? children : <Provider store={store}>
             {isAdminPath ? (
               // Render only children for admin paths
               children
@@ -48,7 +49,7 @@ export default function RootLayout({
                 <MainFooter />
               </>
             )}
-          </Provider>
+          </Provider>}
         </ToastProvider>
       </body>
     </html>

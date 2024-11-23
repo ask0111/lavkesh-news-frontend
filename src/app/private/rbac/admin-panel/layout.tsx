@@ -9,7 +9,7 @@ import React from "react";
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="flex h-[100vh] overflow-hidden relative">
-      <div className="flex h-[100vh]">
+      <div className="flex relative h-[100vh]">
         <Sidebar />
         <EditorSidebar />
       </div>
