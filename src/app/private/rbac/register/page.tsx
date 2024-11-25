@@ -1,4 +1,8 @@
 "use client";
+import { handleError } from "@/admin-components/utils/error.handler";
+import { useToast } from "@/common-component/custom-toast/ToastContext";
+import { apiService } from "@/services/axios.service";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -7,6 +11,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 const SignUpPage = () => {
   const history = useRouter();
+  const { showToast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,26 +39,37 @@ const SignUpPage = () => {
     return regex.test(password);
   };
 
-  // Send OTP (mock function for this example)
-  const sendOtp = (email: string) => {
+  const sendOtp = async (email: string, name: string) => {
     console.log("Sending OTP to email:", email);
-    setIsOtpSent(true); // Simulate OTP sent
-    // Add logic to send OTP here via backend or service
-  };
-
-  // Resend OTP
-  const resendOtp = () => {
-    console.log("Resending OTP...");
-    // Add resend OTP logic here
+    try {
+      const res = await apiService.post("/auth/send-otp", { email, name});
+      const response = res.data;
+      if (response.status) {
+        setIsOtpSent(true); // Simulate OTP sent
+        showToast(response.message, "success");
+      }
+    } catch (error) {
+      console.log("Send OTP Error: ", error);
+      handleError(error, showToast);
+    }
   };
 
   // Handle OTP verification
-  const handleVerifyOtp = () => {
-    if (formData.otp === "1234") {
-      console.log("OTP Verified");
-      setIsEmailVerified(true); // Mark email as verified
-    } else {
+  const handleVerifyOtp = async (email: string, otp: string) => {
+    if (!otp) {
+      return showToast("Enter Valid OTP", "error");
+    }
+    try {
+      const res = await apiService.post("/auth/verify-otp", { email, otp });
+      const response = res.data;
+      if (response.status) {
+        setIsEmailVerified(true); // Mark email as verified
+      } else {
+        setErrors({ ...errors, otp: "Invalid OTP" });
+      }
+    } catch (error) {
       setErrors({ ...errors, otp: "Invalid OTP" });
+      handleError(error, showToast);
     }
   };
 
@@ -64,34 +80,54 @@ const SignUpPage = () => {
     }
   };
 
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const formValidation = () => {
     const newErrors: any = {};
 
-    // Basic form validations
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.password) newErrors.password = "Password is required";
     if (!validatePassword(formData.password)) {
       newErrors.password =
         "Password must be at least 8 characters long, including one uppercase letter, one number, and one special character.";
     }
+    if(formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do NOT match!"
+    }
     if (!formData.otp) newErrors.otp = "OTP is required";
-    if (!captchaVerified) newErrors.captcha = "Please complete CAPTCHA verification";
+    // if (!captchaVerified)
+    //   newErrors.captcha = "Please complete CAPTCHA verification";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      return false;
     } else {
-      console.log("Form Submitted:", formData);
-      history.push("/dashboard"); // Redirect to dashboard after successful signup
+      return true;
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async(e: React.FormEvent) => {
+    e.preventDefault();
+    if (formValidation()) {
+      try {
+        const res = await apiService.post('/auth/register', {name: formData.name, email: formData.email, password: formData.password, otp: formData.otp});
+        const response = res.data;
+        if(response.status){
+          showToast(response.message, 'success');
+          history.push(`private/rbac${response.data.redirect}`);
+        }else{
+          showToast(response.message, 'error');
+        }
+      } catch (error) {
+        console.log('Post user error: ', error);
+        handleError(error, showToast);
+      }
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Company Section */}
-      <div className="w-full md:w-1/2 bg-gradient-to-r from-teal-400 to-blue-500 p-8 flex flex-col justify-center items-center text-white">
+      <div className="w-full md:w-1/2 bg-gradient-to-r from-teal-400 to-blue-500 px-8 flex flex-col justify-center items-center text-white">
         <div className="max-w-lg flex flex-col justify-center items-center text-center">
           <div className="w-44 h-44">
             <img src="/image/fly.png" className="w-full h-full" alt="image" />
@@ -106,9 +142,9 @@ const SignUpPage = () => {
       {/* Sign Up Section */}
       <div className="w-full md:w-1/2 bg-white p-8 flex flex-col justify-center items-center">
         <div className="w-full max-w-sm">
-          <div className="flex justify-center mb-6">
+          {/* <div className="flex justify-center mb-6">
             <img src="/image/fly.png" alt="Logo" className="w-24 h-24" />
-          </div>
+          </div> */}
 
           <h2 className="text-3xl font-semibold text-center text-teal-600 mb-4">
             Create Your Account
@@ -150,7 +186,7 @@ const SignUpPage = () => {
             {!isOtpSent && !isEmailVerified && (
               <button
                 type="button"
-                onClick={() => sendOtp(formData.email)}
+                onClick={() => sendOtp(formData.email, formData.name)}
                 className="w-full bg-teal-500 text-white p-4 rounded-md hover:bg-teal-600 transition-colors mb-4"
               >
                 Send OTP
@@ -184,7 +220,7 @@ const SignUpPage = () => {
                   </div>
                   <button
                     type="button"
-                    onClick={resendOtp}
+                    onClick={() => sendOtp(formData.email, formData.name)}
                     className="text-teal-500 hover:text-teal-600"
                   >
                     Resend OTP
@@ -195,7 +231,7 @@ const SignUpPage = () => {
                 )}
                 <button
                   type="button"
-                  onClick={handleVerifyOtp}
+                  onClick={() => handleVerifyOtp(formData.email, formData.otp)}
                   className="w-full bg-teal-500 text-white p-4 rounded-md hover:bg-teal-600 transition-colors mt-2"
                 >
                   Verify OTP
@@ -219,14 +255,16 @@ const SignUpPage = () => {
             <div className="mb-4">
               <input
                 type="password"
-                name="confirm-password"
+                name="confirmPassword"
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
               {errors.confirmPassword && (
-                <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.confirmPassword}
+                </p>
               )}
             </div>
 
@@ -247,6 +285,8 @@ const SignUpPage = () => {
               Sign Up
             </button>
           </form>
+          <br />
+          <p>Already have an account? <Link className="text-blue-600" href="/private/rbac/login">Login</Link> </p>
         </div>
       </div>
     </div>
