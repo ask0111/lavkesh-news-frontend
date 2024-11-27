@@ -1,5 +1,6 @@
 "use client";
 import { handleError } from "@/admin-components/utils/error.handler";
+import { validatePassword } from "@/admin-components/validations/BlogForm.validation";
 import { useToast } from "@/common-component/custom-toast/ToastContext";
 import { apiService } from "@/services/axios.service";
 import Link from "next/link";
@@ -33,11 +34,7 @@ const SignUpPage = () => {
   };
 
   // Validate password strength
-  const validatePassword = (password: string) => {
-    const regex =
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return regex.test(password);
-  };
+  
 
   const sendOtp = async (email: string, name: string) => {
     console.log("Sending OTP to email:", email);

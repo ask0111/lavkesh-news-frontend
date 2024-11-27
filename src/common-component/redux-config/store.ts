@@ -2,11 +2,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import toggleReducer from "./slices/toggleSlice";
 import blogPostReducer from "./slices/blogPostSlice";
+import authReducer from "./slices/authSlice";
 
 const store = configureStore({
   reducer: {
     toggle: toggleReducer,
     blogPosts: blogPostReducer,
+    checkAuth: authReducer,
   },
   });
 

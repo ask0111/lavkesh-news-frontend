@@ -133,7 +133,6 @@ export default function EditorSidebar() {
     try {
       const res = await apiService.delete(`/s3/delete-s3-url/${fileId}`);
       const response = res.data;
-      // console.log(response);
       if (response.status) {
         removeAndAddFile(response.data._id, null);
         showToast(response.message, "success");

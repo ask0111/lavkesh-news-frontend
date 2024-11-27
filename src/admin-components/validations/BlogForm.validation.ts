@@ -19,3 +19,9 @@ export const validate = (values: BlogPost ) => {
 
     return newErrors;
   };
+
+  export const validatePassword = (password: string) => {
+    const regex =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+  };

@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^2.3.0",
     "@tinymce/tinymce-react": "^5.1.1",
     "axios": "^1.7.7",
+    "js-cookie": "^3.0.5",
     "next": "15.0.1",
     "react": "^18.3.1",
     "react-csv": "^2.2.2",
@@ -26,6 +27,7 @@
     "tw-elements": "^2.0.0"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

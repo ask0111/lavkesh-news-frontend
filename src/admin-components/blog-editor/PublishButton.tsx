@@ -15,7 +15,10 @@ const PublishButton = () => {
   const { posts, loading, error } = useSelector(
     (state: RootState) => state.blogPosts
   );
-  const { showToast } = useToast();
+  const profileId = useSelector(
+    (state: RootState) => state.checkAuth?.user?._id
+  );
+    const { showToast } = useToast();
 
   const handlePublish = async (e: React.FormEvent, postId: string | undefined) => {
     e.preventDefault();
@@ -25,10 +28,13 @@ const PublishButton = () => {
         dispatch(setEmptyPosts(validationErrors));
         showToast('Fill required fields!', 'warning');
         dispatch(setLoading(false))
-    } else {
+    }
+    else if(!profileId) {
+      showToast('login id not found! please refresh page and try again!')
+    }
+    else {
       try {
-
-          const res = !postId ? await apiService.post("/blogs/", posts) : await apiService.put(`/blogs/${postId}`, posts);
+          const res = !postId ? await apiService.post("/blogs/", {...posts, author: profileId}) : await apiService.put(`/blogs/${postId}`, posts);
           const response = res.data;
           if (response.status) {
             showToast(response.message, "success");

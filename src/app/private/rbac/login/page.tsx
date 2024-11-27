@@ -2,6 +2,8 @@
 import { handleError } from "@/admin-components/utils/error.handler";
 import { useToast } from "@/common-component/custom-toast/ToastContext";
 import { apiService } from "@/services/axios.service";
+import { storeCookies } from "@/services/cookies.service";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
@@ -38,7 +40,8 @@ const LoginPage = () => {
         console.log(response)
         if(response.status){
           showToast(response.message, 'success');
-          history.push(`/`);
+          storeCookies('token', response.data.accessToken);
+          history.push(`/private/rbac/admin-panel/profile`);
         }else{
           showToast(response.message, 'error');
         }
@@ -47,7 +50,7 @@ const LoginPage = () => {
       }
     }
   };
-
+  
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Company Section */}
@@ -145,9 +148,9 @@ const LoginPage = () => {
             <div className="text-center">
               <p className="text-sm text-gray-500">
                 Forgot your password?{" "}
-                <span className="text-teal-500 cursor-pointer hover:text-teal-600">
+                <Link href={'/private/rbac/forgot-password'} className="text-teal-500 cursor-pointer hover:text-teal-600">
                   Reset it
-                </span>
+                </Link>
               </p>
               <p className="text-sm text-gray-500">
                 Don't have an account?{" "}

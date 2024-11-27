@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ['www.mvpthemes.com', 'mvpthemes.com', 'images.pexels.com'],
+    domains: ['www.mvpthemes.com', 'mvpthemes.com', 'images.pexels.com', 'private-lv-news-bucket.s3.amazonaws.com',],
   },
 };
 

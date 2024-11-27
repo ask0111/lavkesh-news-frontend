@@ -1,9 +1,11 @@
+"use client"
 import React from "react";
 import Image from "next/image";
 import { BiSolidRightArrow } from "react-icons/bi";
 import Carousel from "../carousal/CarousalSlider";
+import { newsData } from "../data/data";
 
-export const HomeSections = () => {
+export const HomeSections = ({props}: {props: any}) => {
   const latestNewsArray = [
     {
       image:
@@ -67,9 +69,10 @@ export const HomeSections = () => {
   return (
     <section className="">
       <div className="flex gap-3 justify-between mt-4">
-        <div>
+        <div className="w-[40rem]">
           <TitleNews title="Stories" />
-          {storiesNewsArray.map(({ image, type, date, title }) => (
+          <Carousel perItem={1}>
+          {props.map(({url, image, categories, createAt, title }: any) => (
             <DivBox
               key={1}
               width={"w-[40rem]"}
@@ -77,11 +80,13 @@ export const HomeSections = () => {
               position="absolute bottom-10 text-white px-10 text-h6"
               textSize="text-h3"
               imageSrc={image}
-              type={type}
-              date={date}
+              type={categories}
+              date={createAt}
               title={title}
+              url={url}
             />
           ))}
+          </Carousel>
         </div>
         <div>
           <TitleNews title="Latest" />
@@ -97,6 +102,7 @@ export const HomeSections = () => {
                 type={type}
                 date={date}
                 title={title}
+                url={""}
               />
             ))}
           </div>
@@ -105,7 +111,28 @@ export const HomeSections = () => {
       <div>
         <div className="w-full">
           <TitleNews title="Sports" />
-          <Carousel perItem={3} />
+          <Carousel perItem={3} >
+          {newsData.map(({ url, image, type, date, title }: any, index: number) => (
+          <div key={index} className="relative group px-2">
+            <DivBox
+              key={1}
+              width={"w-[100%]"}
+              height={"h-[60vh]"}
+              position="absolute bottom-10 text-white px-10 text-h6"
+              textSize="text-h3"
+              imageSrc={image}
+              type={type}
+              date={date}
+              title={title}
+              url={url}
+            />
+            {/* //     <img className="w-full rounded-lg transition duration-300 ease-in-out" src={image} alt={`Slide ${index + 1}`} />
+        //     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out">
+        //       <h2 className="text-white text-xl font-bold">Slide {index + 1}</h2>
+        //     </div> */}
+          </div>
+        ))}
+          </Carousel>
         </div>
         <br />
         <br />
@@ -125,6 +152,7 @@ export const HomeSections = () => {
               type={type}
               date={date}
               title={title}
+              url={""}
             />
           ))}
         </div>
@@ -154,6 +182,7 @@ interface DivBoxProps {
   type: string;
   date: string;
   title: string;
+  url: string;
 }
 
 export const DivBox: React.FC<DivBoxProps> = ({
@@ -165,11 +194,13 @@ export const DivBox: React.FC<DivBoxProps> = ({
   type,
   date,
   title,
+  url,
 }) => {
   return (
     <>
       <div
         className={`${width} mb-4 overflow-hidden rounded-xl bg-slate-50 relative`}
+        onClick={()=> window.location.href = process.env.NEXT_PUBLIC_FRONTEND_URL + "/" + url }
       >
         <div className={`${width} ${height} object-cover`}>
           <Image
@@ -185,7 +216,7 @@ export const DivBox: React.FC<DivBoxProps> = ({
             ""
           )}
         </div>
-        <div className={`${width} p-4 ${position} `}>
+        <div className={`${width} p-4 ${position} cursor-pointer`}>
           <p className="text-xs ">
             <span className="font-bold text-fuchsia-500">{type}</span> /{" "}
             <span>{date}</span>{" "}
@@ -206,6 +237,7 @@ export const HorizontalDivBox: React.FC<DivBoxProps> = ({
   type,
   date,
   title,
+  url,
 }) => {
   return (
     <div

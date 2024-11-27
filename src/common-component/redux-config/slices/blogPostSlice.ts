@@ -28,7 +28,7 @@ const InitailPost = {
   title: "",
   subTitle: "",
   image: "",
-  content: "Content",
+  content: "Small phones have been a rare find for years, and that's only expected to continue in 2025 and beyond. If reports and leaks about upcoming Samsung and Apple devices turn out to be true, both companies may shake up their smartphone lineups in the coming years -- potentially resulting in an even bigger shift towards larger screens. ",
   categories: "",
   slug: "",
   url: "",

@@ -19,6 +19,9 @@ const TopBar: React.FC = () => {
   const { toggleValue, editorSidebarToggleValue } = useSelector(
     (state: RootState) => state.toggle
   );
+  const { user } = useSelector(
+    (state: RootState) => state.checkAuth
+  );
 
   const OnChangeHandler = () => {};
   const OnClickHandler = () => {};
@@ -56,14 +59,14 @@ const TopBar: React.FC = () => {
           size={24}
           className="text- cursor-pointer"
         /> */}
-        <UserProfile />
+        <UserProfile user={user} />
       </div>
     </div>
   );
 };
 
 
-const UserProfile = () => {
+const UserProfile = ({user}: {user: any}) => {
   const [showPopup, setShowPopup] = useState(false);
   const router = useRouter(); // For navigation in Next.js
 
@@ -90,8 +93,8 @@ const UserProfile = () => {
           onMouseEnter={() => setShowPopup(true)} // Keep popup open while hovering over it
           onMouseLeave={() => setShowPopup(false)} // Hide popup when not hovering
         >
-          <p className="text-sm font-medium text-gray-800">John Doe</p>
-          <p className="text-xs text-gray-600">johndoe@example.com</p>
+          <p className="text-sm font-medium text-gray-800">{user.name}</p>
+          <p className="text-xs text-gray-600">{user.email}</p>
           <p className="text-xs text-gray-500">Member since 2021</p>
         </div>
       )}
