@@ -29,8 +29,8 @@ const categories = ["Technology", "News", "Lifestyle", "Health"]; // Example cat
 
 const ControlPage = () => {
   const [permissions, setPermissions] = useState(
-    users.reduce((acc, user) => {
-      acc[user.id] = {
+    users.reduce((acc: any, user) => {
+      acc[user?.id] = {
         canUploadMedia: false,
         canCreatePost: false,
         canEditPost: false,
@@ -41,9 +41,9 @@ const ControlPage = () => {
     }, {})
   );
 
-  const handlePermissionChange = (userId, permission) => (e) => {
+  const handlePermissionChange = (userId: string, permission: any)  => (e: any) => {
     const { checked } = e.target;
-    setPermissions((prev) => ({
+    setPermissions((prev: any) => ({
       ...prev,
       [userId]: {
         ...prev[userId],
@@ -52,9 +52,9 @@ const ControlPage = () => {
     }));
   };
 
-  const handleCategoryChange = (userId, category) => (e) => {
+  const handleCategoryChange = (userId: string, category: any) => (e: any) => {
     const { checked } = e.target;
-    setPermissions((prev) => {
+    setPermissions((prev: any) => {
       const allowedCategories = prev[userId].allowedCategories;
       return {
         ...prev,
@@ -62,13 +62,13 @@ const ControlPage = () => {
           ...prev[userId],
           allowedCategories: checked
             ? [...allowedCategories, category]
-            : allowedCategories.filter((cat) => cat !== category),
+            : allowedCategories.filter((cat: any) => cat !== category),
         },
       };
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log("Updated Permissions:", permissions);
     // Save permissions via API

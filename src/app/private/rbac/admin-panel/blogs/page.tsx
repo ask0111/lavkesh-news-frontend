@@ -97,7 +97,7 @@ export default function ManageBlogs() {
     try {
       const res = await apiService.get('/blogs/');
       const response = res.data;
-      console.log(response)
+      // console.log(response)
       if(response.status){
         setBlogDatas(response.data);
       }

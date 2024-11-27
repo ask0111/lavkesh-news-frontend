@@ -37,7 +37,7 @@ const SignUpPage = () => {
   
 
   const sendOtp = async (email: string, name: string) => {
-    console.log("Sending OTP to email:", email);
+    // console.log("Sending OTP to email:", email);
     try {
       const res = await apiService.post("/auth/send-otp", { email, name});
       const response = res.data;
