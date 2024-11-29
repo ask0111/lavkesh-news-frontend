@@ -1,6 +1,7 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { getCookies } from "./cookies.service";
 
-export const BASE_PATH= '/api/v1/news/lv-powered'
+export const BASE_PATH = "/api/v1/news/lv-powered";
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL + BASE_PATH, // Replace with your base API URL
@@ -8,20 +9,32 @@ const axiosInstance: AxiosInstance = axios.create({
 });
 
 // Set default headers
-axiosInstance.defaults.headers.common['Content-Type'] = 'application/json';
+axiosInstance.defaults.headers.common["Content-Type"] = "application/json";
 
-// Helper function to set a default authorization token
-export const setAuthToken = (token: string | null): void => {
-  if (token) {
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete axiosInstance.defaults.headers.common['Authorization'];
+axiosInstance.interceptors.request.use(
+  (config) => {
+    // Check if the 'Authorization' header is required
+    if (config.headers?.useAuthToken) {
+      const token = getCookies("token");
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      }
+      // Remove the custom `useAuthToken` key to prevent API errors
+      delete config.headers.useAuthToken;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-};
+);
 
 // CRUD operation functions
 export const apiService = {
-  get: async <T = any>(path: string, headers?: Record<string, string>): Promise<AxiosResponse<T>> => {
+  get: async <T = any>(
+    path: string,
+    headers?: Record<string, string | number | boolean>
+  ): Promise<AxiosResponse<T>> => {
     const config: AxiosRequestConfig = { headers };
     return axiosInstance.get<T>(path, config);
   },
@@ -44,6 +57,15 @@ export const apiService = {
     return axiosInstance.put<T>(path, data, config);
   },
 
+  patch: async <T = any>(
+    path: string,
+    data: Record<string, any>,
+    headers?: Record<string, string>
+  ): Promise<AxiosResponse<T>> => {
+    const config: AxiosRequestConfig = { headers };
+    return axiosInstance.patch<T>(path, data, config);
+  },
+
   delete: async <T = any>(
     path: string,
     headers?: Record<string, string>
@@ -51,6 +73,34 @@ export const apiService = {
     const config: AxiosRequestConfig = { headers };
     return axiosInstance.delete<T>(path, config);
   },
+
+  request: async <T = any>(
+    method: AxiosRequestConfig['method'],
+    path: string,
+    data?: Record<string, any>,
+    headers?: Record<string, string>,
+  ): Promise<AxiosResponse<T>> => {
+    const config: AxiosRequestConfig = {
+      headers,
+      method,
+      url: path,
+      data,
+    };
+    return axiosInstance.request<T>(config);
+  },
+
 };
 
 export default axiosInstance;
+
+// GET Request With Token and Custom Headers
+// apiService.get('/articles', { useAuthToken: true, 'Custom-Header': 'CustomValue' });
+
+// POST Request With Token and Additional Headers
+// typescript
+// Copy code
+// apiService.post(
+//   '/articles',
+//   { title: 'New Article' },
+//   { useAuthToken: true, 'X-Special-Header': 'SpecialValue' }
+// );

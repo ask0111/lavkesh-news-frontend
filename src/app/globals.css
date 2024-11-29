@@ -1,7 +1,6 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 :root {
   --background: #ffffff;
@@ -20,7 +19,6 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
-
 
 /* styles/globals.css */
 
@@ -42,7 +40,8 @@ body {
 
 /* Keyframes for the wave effect */
 @keyframes wave {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0); /* No movement */
   }
   50% {
@@ -58,22 +57,23 @@ body {
   animation: wave 3s infinite ease-in-out; /* Infinite wave animation */
 }
 
-
-.border-bottom{
+.border-bottom {
   border-bottom: 1px solid gray;
 }
 
-.border-focus{ outline: 'none'};
+.border-focus {
+  outline: "none";
+}
 
 .thinScrollBar {
-  scrollbar-width:thin;
+  scrollbar-width: thin;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 7px; 
+  width: 7px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f0f0f0; 
+  background: #f0f0f0;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #888; /* Scrollbar thumb color */
@@ -83,7 +83,6 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Thumb color on hover */
 }
-
 
 @keyframes fadeIn {
   from {
@@ -98,4 +97,55 @@ body {
 
 .animate-fade-in {
   animation: fadeIn 0.3s ease-in-out;
+}
+
+.hide-animate {
+  animation: hide 0.5s forwards;
+}
+
+@keyframes hide {
+  0% {
+    opacity: 1;
+  }
+  
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

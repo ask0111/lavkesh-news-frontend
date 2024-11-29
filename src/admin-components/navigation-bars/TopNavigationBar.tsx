@@ -27,19 +27,19 @@ const TopBar: React.FC = () => {
   const OnClickHandler = () => {};
 
   return (
-    <div className="w-full px-4 h-16 bg-blue-600 text-white flex items-center justify-between pl-10 shadow-md">
+    <>
       {/* Search Bar */}
       <div className=" flex items-center gap-4">
-        <GoSidebarExpand
+        <FaBars 
           onClick={() => dispatch(setToggle(!toggleValue))}
-          size={26}
+          size={22}
           className=" z-20 left-[500px] top-2 cursor-pointer"
         />
-        <FaBars
+        <GoSidebarExpand
           onClick={() =>
             dispatch(setEditorSidebarToggle(!editorSidebarToggleValue))
           }
-          size={22}
+          size={24}
           className=" z-20 left-[500px] top-2 cursor-pointer"
         />
       </div>
@@ -61,7 +61,7 @@ const TopBar: React.FC = () => {
         /> */}
         <UserProfile user={user} />
       </div>
-    </div>
+    </>
   );
 };
 

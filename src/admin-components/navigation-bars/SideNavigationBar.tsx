@@ -19,6 +19,8 @@ import { AppDispatch, RootState } from "@/common-component/redux-config/store";
 import { useDispatch } from "react-redux";
 import { setToggle } from "@/common-component/redux-config/slices/toggleSlice";
 import { RxCross1 } from "react-icons/rx";
+import { removeCookies } from "@/services/cookies.service";
+import { useToast } from "@/common-component/custom-toast/ToastContext";
 
 interface NavItem {
   icon: React.ElementType;
@@ -31,27 +33,20 @@ const navItems: NavItem[] = [
   { icon: MdAddCircleOutline, label: "Create Blog" },
   { icon: MdOutlineDataset, label: "Blogs" },
   { icon: RiStickyNoteAddFill, label: "Create Pages" },
-  { icon: FaBook, label: "Courses" },
-  { icon: FaEnvelope, label: "Messages" },
   { icon: FaUserAlt, label: "Profile" },
   { icon: FaChartLine, label: "Admin control" },
   { icon: FaChartLine, label: "Reports" },
-  { icon: FaSignOutAlt, label: "Sign Out" },
+  { icon: FaBook, label: "Courses" },
+  { icon: FaEnvelope, label: "Messages" },
+  // { icon: FaSignOutAlt, label: "Sign Out" },
 ];
 
 const Sidebar: React.FC = () => {
-  const toggle = useSelector((state: RootState) => state.toggle.toggleValue);
   const dispatch = useDispatch<AppDispatch>();
+  const {showToast} = useToast();
 
   return (
-    <div
-      // style={{display: toggle ? "block": "none", position: window.innerWidth < 500 ? "absolute": "relative" }}
-      className={`w-56 p-4 border-l border-gray-300 bg-white shadow-sm custom-scrollbar overflow-y-scroll z-20 top-0 ${
-        window.innerWidth < 1100 ? "absolute" : ""
-      } transform transition-transform duration-300 ease-in-out ${
-        toggle ? "translate-x-0" : "absolute -translate-x-full"
-      }`}
-    >
+    <>
       <RxCross1
         onClick={() => dispatch(setToggle(false))}
         className="w-7 h-6 p-1 shadow-sm rounded-full bg-transparent cursor-pointer absolute top-0 right-0"
@@ -62,7 +57,7 @@ const Sidebar: React.FC = () => {
           className="text-blue-600 wave-text hover:animate-ping cursor-pointer transition-transform duration-300 ease-in-out"
         />
       </Link>
-      <h2 className="text-center text-xl font-bold py-4 bg-gradient-to-r from-yellow-500 whitespace-nowrap to-green-500 text-transparent bg-clip-text rotate-x">
+      <h2 className="text-center text-xl font-bold py-4 bg-gradient-to-r from-purple-600 whitespace-nowrap to-blue-600 text-transparent bg-clip-text rotate-x">
         Admin Dashboard
       </h2>
       <br />
@@ -83,8 +78,23 @@ const Sidebar: React.FC = () => {
             </Link>
           </div>
         ))}
+          <div
+            className="p-4 hover:text-blue-600 hover:font-extrabold"
+          >
+            <span
+            onClick={()=> {
+              showToast('user sign-out successfully!', 'success')
+              removeCookies('token');}}
+              className="flex items-center gap-3 cursor-pointer transition"
+            >
+              <FaSignOutAlt size={20} className="mr-3" />
+              <span className="text-sm whitespace-nowrap hover:font-extrabold ">
+              Sign Out
+              </span>
+            </span>
+          </div>
       </div>
-    </div>
+    </>
   );
 };
 

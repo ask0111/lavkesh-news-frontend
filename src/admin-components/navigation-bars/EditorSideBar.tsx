@@ -15,12 +15,8 @@ import { useDispatch } from "react-redux";
 const usedStorage = 35; // GB used
 const totalStorage = 100; // GB total
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export default function EditorSidebar() {
   const dispatch = useDispatch<AppDispatch>();
-  const toggle = useSelector(
-    (state: RootState) => state.toggle.editorSidebarToggleValue
-  );
   const { showToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<"Image" | "Video" | "Audio">(
@@ -176,22 +172,7 @@ export default function EditorSidebar() {
   };
 
   return (
-    <div
-      style={
-        {
-          // width: "280px",
-          // borderLeft: "1px solid lightgray",
-          // transform: toggle ? "translateX(0)" : "translateX(-100%)",
-          // transition: "transform 0.3s ease-in-out",
-          // position: window.innerWidth < 1100 ? "absolute" : "relative",
-        }
-      }
-      className={`w-72 p-4 border-l border-gray-300 bg-white shadow-sm custom-scrollbar overflow-y-scroll z-20 top-0 ${
-        window.innerWidth < 1100 ? "absolute" : ""
-      } transform transition-transform duration-300 ease-in-out ${
-        toggle ? "translate-x-0" : "absolute -translate-x-full"
-      }`}
-    >
+    <>
       <RxCross1
         onClick={() => dispatch(setEditorSidebarToggle(false))}
         className="w-7 h-6 p-1 shadow-sm rounded-full bg-transparent cursor-pointer absolute top-0 right-0"
@@ -245,8 +226,8 @@ export default function EditorSidebar() {
         </button>
       </div>
 
-      {closeStorageSlider && (
-        <div className="relative flex items-center justify-center bg-gray-100 p-6">
+      {/* {closeStorageSlider && ( */}
+        <div className={`relative flex items-center justify-center bg-gray-100 p-6  ${!closeStorageSlider ? ' hide-animate' : ''}`}>
           <IoCloseOutline
             onClick={() => setCloseStorageSlider(false)}
             className="absolute top-2 right-2 cursor-pointer "
@@ -256,7 +237,7 @@ export default function EditorSidebar() {
             totalStorage={totalStorage}
           />
         </div>
-      )}
+      {/* )} */}
       <br />
       {/* Upload Button */}
 
@@ -316,8 +297,8 @@ export default function EditorSidebar() {
           </button>
         </div>
       ) : (
-        closeMediaPopop && (
-          <div className="relative bg-gray-50 p-4 rounded-lg text-center mb-6">
+        // closeMediaPopop && (
+          <div className={`relative bg-gray-50 p-4 rounded-lg text-center mb-6  ${!closeMediaPopop ? ' hide-animate' : ''}`}>
             <IoCloseOutline
               onClick={() => setCloseMediaPopop(false)}
               className="absolute top-2 right-2 cursor-pointer "
@@ -330,7 +311,7 @@ export default function EditorSidebar() {
               Canva account to Dropbox, Google Drive and Box.
             </p>
           </div>
-        )
+        // )
       )}
       <br />
       {/* Display Uploaded Images */}
@@ -385,6 +366,6 @@ export default function EditorSidebar() {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }

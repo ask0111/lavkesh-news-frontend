@@ -1,30 +1,26 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiChevronDown, FiChevronUp, FiDownload, FiSearch } from "react-icons/fi";
 import { CSVLink } from "react-csv"; // CSV export functionality
 import ControlPage from "../admin-control/page";
+import { apiService } from "@/services/axios.service";
+import { handleError } from "@/admin-components/utils/error.handler";
+import { useToast } from "@/common-component/custom-toast/ToastContext";
 
-// Define the types for report data
-interface Report {
-  id: number;
-  name: string;
-  role: string;
-  clicks: number;
-  status: "Active" | "Inactive" | "Blocked";
-  date: string;
-}
 
 const AdminReportPage: React.FC = () => {
   // Sample report data
-  const [reports, setReports] = useState<Report[]>([
-    { id: 1, name: "John Doe", role: "Player", clicks: 150, status: "Active", date: "2024-11-01" },
-    { id: 2, name: "Jane Smith", role: "Admin", clicks: 200, status: "Inactive", date: "2024-11-03" },
-    { id: 3, name: "Alice Johnson", role: "Player", clicks: 120, status: "Active", date: "2024-11-04" },
-    { id: 4, name: "Bob Brown", role: "Player", clicks: 170, status: "Blocked", date: "2024-11-05" },
+  const {showToast} = useToast();
+  const [reports, setReports] = useState<any[]>([
+    // { _id: 1, name: "John Doe", role: "Player", clicks: 150, status: "Active", date: "2024-11-01" },
+    // { _id: 2, name: "Jane Smith", role: "Admin", clicks: 200, status: "Inactive", date: "2024-11-03" },
+    // { _id: 3, name: "Alice Johnson", role: "Player", clicks: 120, status: "Active", date: "2024-11-04" },
+    // { _id: 4, name: "Bob Brown", role: "Player", clicks: 170, status: "Blocked", date: "2024-11-05" },
   ]);
 
   const [search, setSearch] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("All");
+  const [expandedRows, setExpandedRows] = useState<number[]>([]); // Track expanded rows by user ID
 
   // Filtered reports
   const filteredReports = reports.filter((report) => {
@@ -43,14 +39,29 @@ const AdminReportPage: React.FC = () => {
     { label: "Date", key: "date" },
   ];
 
-  const [expandedRows, setExpandedRows] = useState<number[]>([]); // Track expanded rows by user ID
-
   // Toggle row expansion
   const toggleRow = (id: number) => {
     setExpandedRows((prev) =>
       prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id]
     );
   };
+
+  useEffect(()=>{
+    const getUsersData = async()=>{
+      try {
+        const res = await apiService.get('/auth/all-profiles', { useAuthToken: true})
+        const response = res.data;
+        if(response.status){
+          setReports(response.data);
+          showToast(response.message);
+        }
+      } catch (error) {
+        handleError(error, showToast)
+      }
+    }
+    getUsersData();
+  }, [])
+
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -100,32 +111,32 @@ const AdminReportPage: React.FC = () => {
             <tr className="bg-gray-200 text-sm">
               <th className="p-3">ID</th>
               <th className="p-3">Name</th>
+              <th className="p-3">Email</th>
               <th className="p-3">Role</th>
-              <th className="p-3">Clicks</th>
               <th className="p-3">Status</th>
               <th className="p-3">Date</th>
               <th className="p-3 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {reports.map((report) => (
-              <React.Fragment key={report.id}>
+            {reports.map((report, index) => (
+              <React.Fragment key={report._id}>
                 {/* Main Row */}
                 <tr className="text-sm border-b">
-                  <td className="p-3">{report.id}</td>
+                  <td className="p-3">{index+1}</td>
                   <td className="p-3">{report.name}</td>
+                  <td className="p-3">{report.email}</td>
                   <td className="p-3">{report.role}</td>
-                  <td className="p-3">{report.clicks}</td>
-                  <td className={`p-3 ${getStatusStyle(report.status)}`}>
-                    {report.status}
+                  <td className={`p-3 ${getStatusStyle(report.isActive)}`}>
+                    {report.isActive ? "Active" : "Blocked"}
                   </td>
-                  <td className="p-3">{report.date}</td>
+                  <td className="p-3">{report.createdAt.split("T")[0]}</td>
                   <td className="p-3 text-center">
                     <button
-                      onClick={() => toggleRow(report.id)}
+                      onClick={() => toggleRow(report._id)}
                       className="text-blue-600 flex items-center justify-center"
                     >
-                      {expandedRows.includes(report.id) ? (
+                      {expandedRows.includes(report._id) ? (
                         <FiChevronUp className="text-lg" />
                       ) : (
                         <FiChevronDown className="text-lg" />
@@ -135,7 +146,7 @@ const AdminReportPage: React.FC = () => {
                 </tr>
 
                 {/* Expandable Row */}
-                {expandedRows.includes(report.id) && (
+                {expandedRows.includes(report._id) && (
                   <tr>
                     <td colSpan={7} className="p-4 bg-gray-100">
                       <h4 className="font-bold mb-2">Permissions</h4>
@@ -164,17 +175,9 @@ const AdminReportPage: React.FC = () => {
 };
 
 // Helper function for status styles
-const getStatusStyle = (status: "Active" | "Inactive" | "Blocked"): string => {
-  switch (status) {
-    case "Active":
-      return "text-green-600";
-    case "Inactive":
-      return "text-gray-600";
-    case "Blocked":
-      return "text-red-600";
-    default:
-      return "";
-  }
+const getStatusStyle = (status: boolean) => {
+  if(status) "text-green-600"
+  return "text-red-600"
 };
 
 export default AdminReportPage;

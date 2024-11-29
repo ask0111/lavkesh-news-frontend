@@ -81,7 +81,7 @@ export default async function ({ params }: any) {
     const res = await apiService.get(`/blogs?url=${slug}/${id}`);
     const response = res.data;
     const post = response.data[0];
-    if (!response.status) throw new Error("Post not found");
+    if (!response.status || !post) throw new Error("Post not found");
     return (
       <div className="w-full  bg-slate-100">
         <div className="w-[75%] m-auto bg-white p-12">
@@ -94,13 +94,16 @@ export default async function ({ params }: any) {
             <div className="flex items-center p-4 bg-white rounded-lg shadow-m hover:shadow-lg transition-shadow duration-300">
               <img
                 src={
-                  post?.author?.avtaar || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                  post?.author?.avtaar ||
+                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                 }
                 alt={"name"}
                 className="w-16 h-16 rounded-full object-cover mr-4 border-2 border-blue-500"
               />
               <div>
-                <h3 className="text-lg font-semibold">{post?.author?.name || "unknown"}</h3>
+                <h3 className="text-lg font-semibold">
+                  {post?.author?.name || "unknown"}
+                </h3>
                 <p className="text-gray-600">Posts: {"100"}</p>
               </div>
             </div>
@@ -110,7 +113,9 @@ export default async function ({ params }: any) {
                 <AiOutlineClockCircle className="mr-2 text-lg" />
                 <span>
                   Published on{" "}
-                  <span className="font-h2">{post?.createdAt?.split("T")?.[0]}</span>{" "}
+                  <span className="font-h2">
+                    {post?.createdAt?.split("T")?.[0]}
+                  </span>{" "}
                 </span>
               </div>
 
@@ -144,12 +149,7 @@ export default async function ({ params }: any) {
             </div>
           </div>
           <div>
-            <Image
-              src={post?.image}
-              width={1000}
-              height={1000}
-              alt="Image"
-            />
+            <Image src={post?.image} width={1000} height={1000} alt="Image" />
           </div>
           <div className="mt-2">
             <div
@@ -157,34 +157,35 @@ export default async function ({ params }: any) {
     first-letter:text-7xl first-letter:font-bold first-letter:text-slate-900
     first-letter:mr-3 first-letter:float-left text-xl font-sans
   "
-  dangerouslySetInnerHTML={{ __html: post?.content }}
-
+              dangerouslySetInnerHTML={{ __html: post?.content || "" }}
             />
           </div>
         </div>
         <div className="bg-white p-6 shadow-lg rounded-lg mt-2">
           <h2 className="text-2xl font-semibold mb-4">Latest News</h2>
-          <Carousel perItem={5} >
-          {newsData.map(({ url, image, type, date, title }: any, index: number) => (
-          <div key={index} className="relative group px-2">
-            <DivBox
-              key={1}
-              width={"w-[100%]"}
-              height={"h-[60vh]"}
-              position="absolute bottom-10 text-white px-10 text-h6"
-              textSize="text-h3"
-              imageSrc={image}
-              type={type}
-              date={date}
-              title={title}
-              url={url}
-            />
-            {/* //     <img className="w-full rounded-lg transition duration-300 ease-in-out" src={image} alt={`Slide ${index + 1}`} />
+          <Carousel perItem={5}>
+            {newsData.map(
+              ({ url, image, type, date, title }: any, index: number) => (
+                <div key={index} className="relative group px-2">
+                  <DivBox
+                    key={1}
+                    width={"w-[100%]"}
+                    height={"h-[60vh]"}
+                    position="absolute bottom-10 text-white px-10 text-h6"
+                    textSize="text-h3"
+                    imageSrc={image}
+                    type={type}
+                    date={date}
+                    title={title}
+                    url={url}
+                  />
+                  {/* //     <img className="w-full rounded-lg transition duration-300 ease-in-out" src={image} alt={`Slide ${index + 1}`} />
         //     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out">
         //       <h2 className="text-white text-xl font-bold">Slide {index + 1}</h2>
         //     </div> */}
-          </div>
-        ))}
+                </div>
+              )
+            )}
           </Carousel>
           <br />
           <br />
@@ -220,7 +221,7 @@ export default async function ({ params }: any) {
       </div>
     );
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return <NotFoundPage />;
   }
 }
