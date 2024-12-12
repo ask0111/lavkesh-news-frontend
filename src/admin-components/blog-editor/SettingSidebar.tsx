@@ -5,6 +5,7 @@ import { BsFillSendArrowUpFill } from "react-icons/bs";
 import { RxCross1 } from "react-icons/rx";
 import { useSelector, useDispatch } from "react-redux";
 import PublishButton from "./PublishButton";
+import Select from "react-select";
 
 export function SettingsSidebar({ handleChange }: { handleChange: any }) {
   const dispatch = useDispatch<AppDispatch>();
@@ -12,14 +13,31 @@ export function SettingsSidebar({ handleChange }: { handleChange: any }) {
     (state: RootState) => state.blogPosts
   );
 
-  const [categories, setCategories] = useState([
-    "Technology",
-    "Health",
-    "Business",
-    "Entertainment",
-    "Sports",
+  // const [categories, setCategories] = useState([
+  //   "Technology",
+  //   "Health",
+  //   "Business",
+  //   "Entertainment",
+  //   "Sports",
+  // ]);
+  const [categoriesOptions] = useState([
+    { value: "Technology", label: "Technology" },
+    { value: "Health", label: "Health" },
+    { value: "Business", label: "Business" },
+    { value: "Entertainment", label: "Entertainment" },
+    { value: "Sports", label: "Sports" },
+    { value: "Cricket", label: "Cricket" },
+    { value: "Archey", label: "Archey" },
+    { value: "Hockey", label: "Hockey" },
+    { value: "Footwall", label: "Footwall" },
+    { value: "Boxing", label: "Boxing" },
   ]);
   const [newTag, setNewTag] = useState("");
+  
+  const handleCategoryChange = (selectedOptions: any) => {
+    const selectedCategories = selectedOptions.map((option: any) => option.value);
+    handleChange("categories", selectedCategories);
+  };
 
   const addTag = () => {
     if (newTag.trim() && !posts.tags.includes(newTag)) {
@@ -48,6 +66,25 @@ export function SettingsSidebar({ handleChange }: { handleChange: any }) {
       {/* Category Selection */}
       <div className="mb-4">
         <label className="block text-sm font-medium mb-2">Category</label>
+        <Select
+          isMulti
+          value={categoriesOptions.filter((option) =>
+            posts.categories.includes(option.value)
+          )}
+          onChange={handleCategoryChange}
+          options={categoriesOptions}
+          placeholder="Select Categories"
+          className={`${
+            emptyPosts?.categories ? "border border-red-500" : "border"
+          }`}
+        />
+        {emptyPosts?.categories && (
+          <p className="text-red-500 text-sm">{emptyPosts?.categories}</p>
+        )}
+      </div>
+
+      {/* <div className="mb-4">
+        <label className="block text-sm font-medium mb-2">Category</label>
         <select
           value={posts.categories}
           onChange={(e) => handleChange("categories", e.target.value)}
@@ -67,7 +104,7 @@ export function SettingsSidebar({ handleChange }: { handleChange: any }) {
         {emptyPosts?.categories && (
           <p className="text-red-500 text-sm">{emptyPosts?.categories}</p>
         )}
-      </div>
+      </div> */}
 
       {/* URL */}
       <div className="mb-4">

@@ -1,6 +1,9 @@
 // pages/NewsPage.tsx
+import { apiService } from "@/services/axios.service";
+import { PageNotFoundError } from "next/dist/shared/lib/utils";
 import Link from "next/link";
 import React from "react";
+import NotFoundPage from "../private/rbac/admin-panel/[slug]/page";
 
 interface NewsItem {
   id: number;
@@ -47,62 +50,73 @@ interface NewsPageProps {
 }
 
 const NewsPage: React.FC<NewsPageProps> = async({ params }) => {
-  const [featuredNews, ...otherNews] = newsData;
   const { slug } = await params;
-  return (
-    <div className="bg-gray-100 p-6">
-      {/* <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Political News</h1> */}
 
-      {/* Featured News */}
-      <div className="w-full bg-white shadow-lg rounded-lg overflow-hidden mb-8">
-        <div className="relative">
-          <img
-            src={featuredNews.image}
-            alt={featuredNews.title}
-            className="w-full h-[400px] object-cover"
-          />
-          <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent p-6 w-full text-white">
-            <h2 className="text-3xl font-bold">{featuredNews.title}</h2>
-            <p className="text-sm mt-2">{featuredNews.date}</p>
-            <p className="mt-4">{featuredNews.summary}</p>
+  try {
+    const res = await apiService.get(`/blogs?categories=${slug}`);
+    const response = res.data;
+    const featuredNews = response.data[0];
+    const otherNews = response.data;
+    if(!response.status)throw new Error("Failed to fetch user data");
+
+    return (
+      <div className="bg-gray-100 p-6">
+        {/* <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Political News</h1> */}
+  
+        {/* Featured News */}
+        <div className="w-full bg-white shadow-lg rounded-lg overflow-hidden mb-8">
+          <div className="relative">
+            <img
+              src={featuredNews.image}
+              alt={featuredNews.title}
+              className="w-full h-[400px] object-cover"
+            />
+            <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent p-6 w-full text-white">
+              <h2 className="text-3xl font-bold">{featuredNews.title}</h2>
+              <p className="text-sm mt-2">{featuredNews.createdAt}</p>
+              <p className="mt-4">{featuredNews.subTitle}</p>
+            </div>
+            <span className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-lg">
+              {slug.toUpperCase()}
+            </span>
           </div>
-          <span className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-lg">
-            {slug.toUpperCase()}
-          </span>
         </div>
+  
+        {/* Other News */}
+        <div className=" grid grid-cols-1 place-content-center md:grid-cols-1 gap-6">
+          {otherNews.map((news: any) => (
+            <Link
+              href={`/${news.url}`}
+              key={news.id}
+              className="group w-[70%] m-auto flex bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition duration-300"
+            >
+              <div className="w-1/3 relative overflow-hidden">
+                <img
+                  src={news.image}
+                  alt={news.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <span className="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold py-1 px-2 rounded-lg">
+                  {news.createdAt.split("T")[0]}
+                </span>
+              </div>
+              <div className="p-4 w-2/3">
+                <h3 className="text-lg font-semibold text-gray-800 hover:text-red-500 transition duration-300">
+                  {news.title}
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">{news.createdAt}</p>
+                <p className="text-gray-700 mt-3">{news.subTitle}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <div></div>
       </div>
-
-      {/* Other News */}
-      <div className=" grid grid-cols-1 place-content-center md:grid-cols-1 gap-6">
-        {otherNews.map((news) => (
-          <Link
-            href={`/${slug}/details`}
-            key={news.id}
-            className="group w-[70%] m-auto flex bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition duration-300"
-          >
-            <div className="w-1/3 relative overflow-hidden">
-              <img
-                src={news.image}
-                alt={news.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              {/* <span className="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold py-1 px-2 rounded-lg">
-                {news.category}
-              </span> */}
-            </div>
-            <div className="p-4 w-2/3">
-              <h3 className="text-lg font-semibold text-gray-800 hover:text-red-500 transition duration-300">
-                {news.title}
-              </h3>
-              <p className="text-sm text-gray-500 mt-1">{news.date}</p>
-              <p className="text-gray-700 mt-3">{news.summary}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
-      <div></div>
-    </div>
-  );
+    );
+  } catch (error) {
+    console.log(error)
+    return <NotFoundPage />
+  }
 };
 
 export default NewsPage;

@@ -93,14 +93,15 @@ export const apiService = {
 
 export default axiosInstance;
 
-// GET Request With Token and Custom Headers
-// apiService.get('/articles', { useAuthToken: true, 'Custom-Header': 'CustomValue' });
-
-// POST Request With Token and Additional Headers
-// typescript
-// Copy code
-// apiService.post(
-//   '/articles',
-//   { title: 'New Article' },
-//   { useAuthToken: true, 'X-Special-Header': 'SpecialValue' }
-// );
+export const fetchApiService = async(path: string, query: string)=>{
+  try {
+    const res = await apiService.get(`${path}?${query}`);
+    const response = res.data;
+    if(!response.status)throw new Error("Failed to fetch user data");
+console.log(response)
+    return response.data;
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}

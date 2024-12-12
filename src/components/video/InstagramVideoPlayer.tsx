@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useRef, useState } from "react";
 import { BiArrowFromTop, BiArrowToTop } from "react-icons/bi";
 import { FaShare } from "react-icons/fa";
@@ -119,7 +120,7 @@ const VideoReels: React.FC = () => {
 
 
           {/* Black Overlay on Hover */}
-          <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          {/* <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity"></div> */}
 
           {/* Text Overlay */}
           <div className="absolute  bottom-20 left-8 text-white space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">

@@ -36,14 +36,14 @@ const news = [
     image:
       "https://mvpthemes.com/zoxnews/wp-content/uploads/2017/07/apartments-400x240.jpg",
     title: "Exploring Real Estate Trends in 2024",
-    date: new Date("2024-10-28").toDateString(),
+    date: new Date("2024-10-28").toDateString() ,
   },
   {
     id: 5,
     image:
       "https://mvpthemes.com/zoxnews/wp-content/uploads/2017/07/vr-headset-80x80.jpg",
     title: "Virtual Reality’s Role in Modern Education",
-    date: new Date("2024-10-20").toDateString(),
+    date: new Date("2024-10-20").toDateString() ,
   },
   {
     id: 6,

@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Image from "next/image";
 import { BiSolidRightArrow } from "react-icons/bi";
@@ -7,61 +6,23 @@ import { newsData } from "../data/data";
 import InstagramVideoPlayer from "../video/InstagramVideoPlayer";
 import VideoReels from "../video/InstagramVideoPlayer";
 import Link from "next/link";
+import { fetchApiService } from "@/services/axios.service";
 
-export const HomeSections = ({ props }: { props: any }) => {
-  const latestNewsArray = [
-    {
-      image:
-        "https://mvpthemes.com/zoxnews/wp-content/uploads/2017/07/apartments-400x240.jpg",
-      type: "bussiness",
-      date: new Date().toDateString(),
-      title:
-        "To add text overlay on the images in your carousel and change the image's color to a dark overlay on hover, you can achieve this with CSS. Below is an updated version of your ",
-    },
-    {
-      image:
-        "https://mvpthemes.com/zoxnews/wp-content/uploads/2017/07/apartments-400x240.jpg",
-      type: "bussiness",
-      date: new Date().toDateString(),
-      title:
-        "To add text overlay on the images in your carousel and change the image's color to a dark overlay on hover, you can achieve this with CSS. Below is an updated version of your ",
-    },
-    {
-      image:
-        "https://mvpthemes.com/zoxnews/wp-content/uploads/2017/07/apartments-400x240.jpg",
-      type: "bussiness",
-      date: new Date().toDateString(),
-      title:
-        "To add text overlay on the images in your carousel and change the image's color to a dark overlay on hover, you can achieve this with CSS. Below is an updated version of your ",
-    },
-    {
-      image:
-        "https://mvpthemes.com/zoxnews/wp-content/uploads/2017/07/apartments-400x240.jpg",
-      type: "bussiness",
-      date: new Date().toDateString(),
-      title:
-        "To add text overlay on the images in your carousel and change the image's color to a dark overlay on hover, you can achieve this with CSS. Below is an updated version of your ",
-    },
-    {
-      image:
-        "https://mvpthemes.com/zoxnews/wp-content/uploads/2017/07/apartments-400x240.jpg",
-      type: "bussiness",
-      date: new Date().toDateString(),
-      title:
-        "To add text overlay on the images in your carousel and change the image's color to a dark overlay on hover, you can achieve this with CSS. Below is an updated version of your ",
-    },
-    
-  ];
-  const storiesNewsArray = [
-    {
-      image:
-        "https://mvpthemes.com/zoxnews/wp-content/uploads/2017/07/apartments-400x240.jpg",
-      type: "bussiness",
-      date: new Date().toDateString(),
-      title:
-        "To add text overlay on the images in your carousel and change the image's color to a dark overlay on hover, you can achieve this with CSS. Below is an updated version of your ",
-    },
-  ];
+export const HomeSections = async ({ props }: { props: any }) => {
+  const latestNews = await fetchApiService("/blogs/", `limit=10`);
+  const sportsData = await fetchApiService("/blogs/", `categories=Sports`);
+
+  const newsDatas = await Promise.all(
+    ["Cricket", "Archery", "Running", "Hockey", "Football", "Boxing"].map(
+      async (path) => {
+        return {
+          headingTitle: path,
+          data: await fetchApiService("/blogs/", `limit=6&categories=${path}`),
+        };
+      }
+    )
+  );
+  
   return (
     <section className="">
       <div className="flex gap-3 justify-between mt-4">
@@ -90,21 +51,23 @@ export const HomeSections = ({ props }: { props: any }) => {
         </div>
         <div>
           <TitleNews title="Latest" />
-          <div className="flex h-[70vh] no-scrollbar flex-wrap overflow-y-scroll gap-3 ">
-            {latestNewsArray.map(({ image, type, date, title }, index) => (
-              <HorizontalDivBox
-                key={index}
-                width={"w-[12rem]"}
-                height={"h-[8rem]"}
-                position="static"
-                textSize="text-h6"
-                imageSrc={image}
-                type={type}
-                date={date}
-                title={title}
-                url={""}
-              />
-            ))}
+          <div className="flex flex-col h-[70vh] no-scrollbar flex-wrap overflow-y-scroll gap-3 ">
+            {latestNews.map(
+              ({ image, categories, createdAt, title }: any, index: number) => (
+                <HorizontalDivBox
+                  key={index}
+                  width={"w-[12rem]"}
+                  height={"h-[8rem]"}
+                  position="static"
+                  textSize="text-h6"
+                  imageSrc={image}
+                  type={categories[0]}
+                  date={createdAt.split("T")[0]}
+                  title={title}
+                  url={""}
+                />
+              )
+            )}
           </div>
         </div>
       </div>
@@ -112,8 +75,8 @@ export const HomeSections = ({ props }: { props: any }) => {
         <div className="w-full">
           <TitleNews title="Sports" />
           <Carousel perItem={3}>
-            {newsData.map(
-              ({ url, image, type, date, title }: any, index: number) => (
+            {[...sportsData, ...sportsData].map(
+              ({ url, image, createdAt, title }: any, index: number) => (
                 <div key={index} className="relative group px-2">
                   <DivBox
                     key={1}
@@ -122,8 +85,8 @@ export const HomeSections = ({ props }: { props: any }) => {
                     position="absolute bottom-10 text-white px-10 text-h6"
                     textSize="text-h3"
                     imageSrc={image}
-                    type={type}
-                    date={date}
+                    type={'Sports'}
+                    date={createdAt.split("T")[0]}
                     title={title}
                     url={url}
                   />
@@ -139,28 +102,40 @@ export const HomeSections = ({ props }: { props: any }) => {
         <br />
         <br />
         <div className="flex flex-wrap gap-y-4 justify-between">
-          {["Cricket", "Archey", "Runing", "Hockey", "Footwall", "Boxing"].map(
-            (title, index) => (
-              <div className="w-auto mb-6 border-t-2" key={index}>
-                <TitleNews title={title} />
-                {latestNewsArray.map(({ image, type, date, title }, index) => (
-                  <HorizontalDivBox
-                    key={index}
-                    width={"w-[12rem]"}
-                    height={"h-[8rem]"}
-                    position="static"
-                    textSize="text-h6"
-                    imageSrc={image}
-                    type={type}
-                    date={date}
-                    title={title}
-                    url={""}
-                  />
-                ))}
-                <p className="w-full cursor-pointer hover:underline text-purple-300 hover:text-purple-600 text-end font-extrabold"  > <Link href={`/${title.toLowerCase()}`}>Read More</Link>...</p>
-              </div>
-            )
-          )}
+          {newsDatas?.map(({ headingTitle, data }: any, index: number) => {
+            if (!data.length) {
+              return <></>;
+            } else {
+              return (
+                <div className="w-auto mb-6 border-t-2" key={index}>
+                  <TitleNews title={headingTitle} />
+                  {data?.map(
+                    ({ image, createdAt, title }: any, index: number) => (
+                      <HorizontalDivBox
+                        key={index}
+                        width={"w-[12rem]"}
+                        height={"h-[8rem]"}
+                        position="static"
+                        textSize="text-h6"
+                        imageSrc={image}
+                        type={headingTitle}
+                        date={createdAt.split("T")[0]}
+                        title={title}
+                        url={""}
+                      />
+                    )
+                  )}
+                  <p className="w-full cursor-pointer hover:underline text-purple-300 hover:text-purple-600 text-end font-extrabold">
+                    {" "}
+                    <Link href={`/${headingTitle?.toLowerCase()}`}>
+                      Read More
+                    </Link>
+                    ...
+                  </p>
+                </div>
+              );
+            }
+          })}
         </div>
       </div>
     </section>
@@ -170,7 +145,8 @@ export const HomeSections = ({ props }: { props: any }) => {
 const TitleNews = ({ title }: { title: string }) => {
   return (
     <h4 className="text-h4 mb-4 font-extrabold text-purple-500 flex items-center gap-3">
-      <Link href={`${title.toLowerCase()}`}>{title}</Link> <BiSolidRightArrow />
+      <Link href={`${title?.toLowerCase()}`}>{title}</Link>{" "}
+      <BiSolidRightArrow />
     </h4>
   );
 };
@@ -200,12 +176,9 @@ export const DivBox: React.FC<DivBoxProps> = ({
 }) => {
   return (
     <>
-      <div
+      <Link
         className={`${width} mb-4 overflow-hidden rounded-xl bg-slate-50 relative`}
-        onClick={() =>
-          (window.location.href =
-            process.env.NEXT_PUBLIC_FRONTEND_URL + "/" + url)
-        }
+        href={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/${url}`}
       >
         <div className={`${width} ${height} object-cover`}>
           <Image
@@ -228,7 +201,7 @@ export const DivBox: React.FC<DivBoxProps> = ({
           </p>
           <h2 className={`${textSize} font-extrabold`}>{title} </h2>
         </div>
-      </div>
+      </Link>
     </>
   );
 };
@@ -246,7 +219,7 @@ export const HorizontalDivBox: React.FC<DivBoxProps> = ({
 }) => {
   return (
     <div
-      className={`flex items-center w-[400px] mb-2 overflow-hidden rounded-xl bg-slate-50 relative`}
+      className={`flex h-24 items-center w-[400px] mb-2 overflow-hidden rounded-xl bg-slate-50 relative`}
     >
       {/* Image Section */}
       <div className={`w-24 h-24 flex-shrink-0`}>
