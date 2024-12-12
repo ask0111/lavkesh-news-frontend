@@ -84,7 +84,7 @@ export default function EditorSidebar() {
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      showToast("Please select a file first!", "warning");
+      showToast("Please select a file first! ", "warning");
       return;
     }
     const fileData = {
