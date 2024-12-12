@@ -93,7 +93,7 @@ export default function EditorSidebar() {
       fileType: selectedFile.type,
       sizeInBytes: selectedFile.size,
       metadata: {
-        resolution: "1920x1080", // Example metadata
+        resolution: "1920x1080", 
         format: selectedFile.type,
       },
     };
