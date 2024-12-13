@@ -112,7 +112,7 @@ export default function EditorSidebar() {
         removeAndAddFile(null, fileData);
         setPreviewImage(null);
         setSelectedFile(null);
-        showToast("File uploaded successfully!", "success");
+        showToast("File uploaded successfully! ", "success");
       } else {
         showToast(response.message, "error");
       }
@@ -124,7 +124,7 @@ export default function EditorSidebar() {
 
   const handleDeleteImage = async (type: string, fileId: number) => {
     if (!fileId) {
-      showToast(`${type} is not found!`, "error");
+      showToast(`${type} is not found! `, "error");
     }
     try {
       const res = await apiService.delete(`/s3/delete-s3-url/${fileId}`);
