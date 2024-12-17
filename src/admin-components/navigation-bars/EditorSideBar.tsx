@@ -12,8 +12,8 @@ import { RxCross1 } from "react-icons/rx";
 import { setEditorSidebarToggle } from "@/common-component/redux-config/slices/toggleSlice";
 import { useDispatch } from "react-redux";
 
-const usedStorage = 30; // GB used
-const totalStorage = 100; // GB total
+const usedStorage = 30; // X GB used 
+const totalStorage = 100; // Y GB total
 
 export default function EditorSidebar() {
   const dispatch = useDispatch<AppDispatch>();
