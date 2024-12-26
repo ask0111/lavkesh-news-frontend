@@ -16,6 +16,7 @@ const SearchBar: React.FC<SearchBarProps> = ({placeholder, onChange, onClick}) =
                 placeholder={placeholder}
                 onChange={onChange}
             />
+            
                         {/* <FaSearch className=" text-gray-400 mr-2 " /> */}
 
             <button onClick={onClick} type="submit" className="absolute right-[5px] top-[7px] mt-3 mr-4 transform hover:scale-150 hover:text-blue-600 transition duration-300">
