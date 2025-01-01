@@ -11,7 +11,6 @@ import store from "@/common-component/redux-config/store";
 import { ToastProvider } from "@/common-component/custom-toast/ToastContext";
 import { apiService } from "@/services/axios.service";
 import { getCookies } from "@/services/cookies.service";
-import SortingVisualizer from "@/app/prectice"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,7 +37,6 @@ export default function RootLayout({
       <body
         className={`relative ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SortingVisualizer />
         <ToastProvider>
           { isAuthPage ? <Provider store={store}>{children}</Provider>  : <Provider store={store}>
             {isAdminPath ? (
