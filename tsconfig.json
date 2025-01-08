@@ -23,8 +23,10 @@
     ],
     "paths": {
       "@/*": [
-        "./src/*"
+        "./src/*",
+        "./babel.config.js",
       ]
+    
     },
     "target": "ES2017"
   },
